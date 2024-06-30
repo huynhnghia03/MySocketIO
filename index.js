@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const server = require('https').Server(app);
+const server = require('http').Server(app);
 const PORT = process.env.PORT;
 server.listen(PORT)
 
