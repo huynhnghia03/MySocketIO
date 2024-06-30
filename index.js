@@ -1,11 +1,19 @@
 require('dotenv').config()
-const io = require("socket.io")(process.env.PORT, {
+const express = require('express')
+const app = express()
+const http = require("http")
+const server = http.createServer(app)
+const io = require("socket.io")(server, {
     cors: {
         origin: process.env.FRONTEND_URL,
     },
 });
 let activeUsers = []
 let activeComments = []
+app.get("/", (req, rsp, next) => {
+    rsp.json({ "mess": "ok" })
+})
+
 
 io.on('connection', (socket) => {
     socket.on('add-new-user', (newUserID) => {
@@ -116,4 +124,8 @@ io.on('connection', (socket) => {
             socket.broadcast.emit('update-respond-commentBlog', { blog_id, type, comments })
         }
     })
+})
+app.listen(process.env.PORT, () => {
+    console.log(`http://localhost:${process.env.PORT}`)
+
 })
