@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const http = require("http")
 const server = http.createServer(app)
+server.listen(8888);
 const io = require("socket.io")(server, {
     cors: {
         origin: process.env.FRONTEND_URL,
