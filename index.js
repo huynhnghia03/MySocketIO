@@ -1,30 +1,17 @@
 require('dotenv').config()
-const express = require('express')
-const app = express()
-const http = require("http")
-const server = http.createServer(app)
-server.listen(8888);
-// app.use(cors({
-//     origin: process.env.FRONTEND_URL,
-//     methods: "GET,POST,PUT,DELETE",
-//     credentials: true,
-//     optionsSuccessStatus: 200
-//   }))
-const io = require("socket.io")(server, {
+const express = require('express');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
     cors: {
-        origin: process.env.FRONTEND_URL,
-        methods: "GET,POST,PUT,DELETE",
-        credentials: true,
-        optionsSuccessStatus: 200
+        origin: "*",
     },
 });
 let activeUsers = []
 let activeComments = []
-app.get("/", (req, rsp, next) => {
-    rsp.json({ "mess": "ok" })
-})
-
-
 io.on('connection', (socket) => {
     socket.on('add-new-user', (newUserID) => {
         if (!activeUsers.some((user) => user.userID === newUserID)) {
@@ -135,7 +122,11 @@ io.on('connection', (socket) => {
         }
     })
 })
-app.listen(process.env.PORT, () => {
-    console.log(`http://localhost:${process.env.PORT}`)
 
-})
+app.get('/', (req, res) => {
+    res.send('Socket.IO server is running');
+});
+const PORT = process.env.PORT || 8800;
+httpServer.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
