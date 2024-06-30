@@ -4,9 +4,18 @@ const app = express()
 const http = require("http")
 const server = http.createServer(app)
 server.listen(8888);
+// app.use(cors({
+//     origin: process.env.FRONTEND_URL,
+//     methods: "GET,POST,PUT,DELETE",
+//     credentials: true,
+//     optionsSuccessStatus: 200
+//   }))
 const io = require("socket.io")(server, {
     cors: {
         origin: process.env.FRONTEND_URL,
+        methods: "GET,POST,PUT,DELETE",
+        credentials: true,
+        optionsSuccessStatus: 200
     },
 });
 let activeUsers = []
