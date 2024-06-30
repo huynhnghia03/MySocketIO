@@ -1,10 +1,17 @@
 require('dotenv').config()
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const server = require('https').Server(app);
 const PORT = process.env.PORT;
 server.listen(PORT)
 
+const corsOptions = {
+    origin: process.env.FRONTEND_URL,
+    credentials: true,            //access-control-allow-credentials:true
+    optionSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 const io = require("socket.io")(server, {
     cors: {
         origin: process.env.FRONTEND_URL,
